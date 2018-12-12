@@ -42,10 +42,23 @@ const weatherDataRecevied = (state, action) => {
   };
 };
 
+const useDrone = (state, action) => {
+  const { data } = action;
+  if (data == null || typeof(data) == 'undefined' ) return state;
+  const {latitude, longitude} = data.data[data.data.length - 1];
+  return {
+    ...state,
+    latitude,
+    longitude,
+    drone_data: data.data
+  };
+};
+
 const handlers = {
   [actions.FETCH_WEATHER]: startLoading,
   [actions.WEATHER_ID_RECEIVED]: weatherIDReceived,
-  [actions.WEATHER_DATA_RECEIVED]: weatherDataRecevied
+  [actions.WEATHER_DATA_RECEIVED]: weatherDataRecevied,
+  [actions.USE_DRONE_DATA_RECEIVED]: useDrone
 };
 
 export default (state = initialState, action) => {

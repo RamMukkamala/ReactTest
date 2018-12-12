@@ -1,9 +1,8 @@
 import "isomorphic-fetch";
 
-const findWeatherbyId = async id => {
-  // Using the create-react-app's proxy for CORS issues
+const statusDrone = async () => {
   const response = await fetch(
-    `https://react-assessment-api.herokuapp.com/api/weather/location/${id}/`
+  	'https://react-assessment-api.herokuapp.com/api/drone'
   );
   if (!response.ok) {
     return { error: { code: response.status } };
@@ -12,7 +11,6 @@ const findWeatherbyId = async id => {
   return { data: json };
 };
 
-export default findWeatherbyId;
+export default statusDrone;
 
 
-	

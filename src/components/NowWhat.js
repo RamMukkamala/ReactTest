@@ -7,6 +7,8 @@ import ListItem from "@material-ui/core/ListItem";
 import ListItemText from "@material-ui/core/ListItemText";
 import { withStyles } from "@material-ui/core/styles";
 import AvatarRaw from "@material-ui/core/Avatar";
+import { connect } from "react-redux";
+import * as actions from "../store/actions";
 
 const cardStyles = theme => ({
   root: {
@@ -64,3 +66,4 @@ const NowWhat = props => {
 };
 
 export default withStyles(styles)(NowWhat);
+

@@ -1,6 +1,7 @@
 import { takeEvery, call, put, cancel, all } from "redux-saga/effects";
 import API from "../api";
 import * as actions from "../actions";
+import { delay } from 'redux-saga';
 
 /*
   1. The weather service requires us to make a search by lat/lng to find its
@@ -50,10 +51,27 @@ function* watchFetchWeather(action) {
   yield put({ type: actions.WEATHER_ID_RECEIVED, id: location });
 }
 
+function* useDrone(action) {
+  while(true){
+    const { error, data } = yield call(API.statusDrone);
+    if (error) {
+      yield put({ type: actions.API_ERROR, code: error.code });
+      yield cancel();
+      return;
+    }
+    yield put({ type: actions.USE_DRONE_DATA_RECEIVED, data });
+    if (data == null || typeof(data) == 'undefined' ) continue;
+    const {latitude, longitude} = data.data[data.data.length - 1];
+    yield call(watchFetchWeather, { latitude: latitude, longitude: longitude });
+    yield call(delay, 4000);
+  }
+}
+
 function* watchAppLoad() {
   yield all([
     takeEvery(actions.FETCH_WEATHER, watchFetchWeather),
-    takeEvery(actions.WEATHER_ID_RECEIVED, watchWeatherIdReceived)
+    takeEvery(actions.WEATHER_ID_RECEIVED, watchWeatherIdReceived),
+    takeEvery(actions.USE_DRONE, useDrone)
   ]);
 }
 
